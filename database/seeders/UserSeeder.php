@@ -45,7 +45,8 @@ class UserSeeder extends Seeder
 
         // Konsumen
         User::factory(5)->create([
-            'role' => 'konsumen'
+            'role' => 'konsumen',
+            'password' => bcrypt('konsumen123'),
         ])->each(function ($user) {
             $user->konsumen()->create(
                 Konsumen::factory()->make()->toArray()
