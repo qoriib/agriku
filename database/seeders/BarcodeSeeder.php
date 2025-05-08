@@ -13,6 +13,6 @@ class BarcodeSeeder extends Seeder
      */
     public function run(): void
     {
-        Barcode::factory()->count(20)->create();
+        Barcode::factory()->count(5)->create();
     }
 }

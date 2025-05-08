@@ -34,12 +34,6 @@ class BarcodeController extends Controller
         return redirect()->route('employee.barcode.index')->with('success', 'Data barcode berhasil ditambahkan.');
     }
 
-    public function show($id)
-    {
-        $barcode = Barcode::findOrFail($id);
-        return view('employee.barcode.show', compact('barcode'));
-    }
-
     public function edit($id)
     {
         $barcode = Barcode::findOrFail($id);

@@ -61,4 +61,23 @@ class User extends Authenticatable
     {
         return $this->hasOne(Konsumen::class);
     }
+
+    public function getRoleBadge()
+    {
+        $map = [
+            'admin' => ['Admin', 'danger'],
+            'kepala_divisi' => ['Kepala Divisi', 'primary'],
+            'staf_pengadaan' => ['Staf Pengadaan', 'info'],
+            'staf_produksi' => ['Staf Produksi', 'warning'],
+            'staf_logistik' => ['Staf Logistik', 'secondary'],
+            'pemasok' => ['Pemasok', 'success'],
+            'konsumen' => ['Konsumen', 'dark'],
+        ];
+
+        $role = $this->role;
+        $label = $map[$role][0] ?? ucfirst($role);
+        $color = $map[$role][1] ?? 'secondary';
+
+        return '<span class="badge bg-' . $color . '">' . $label . '</span>';
+    }
 }
