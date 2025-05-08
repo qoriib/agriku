@@ -6,8 +6,11 @@ use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\PemasokController;
 use App\Http\Controllers\Admin\KonsumenController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Customer\PembayaranMakoController;
 use App\Http\Controllers\Customer\PesananBahanBakuController;
 use App\Http\Controllers\Customer\PesananMakoController;
+use App\Http\Controllers\Employee\BarcodeController;
+use App\Http\Controllers\Employee\PersediaanController;
 use Illuminate\Support\Facades\Auth;
 
 Route::middleware('guest')->group(function () {
@@ -36,26 +39,31 @@ Route::prefix('/admin')->name('admin.')->group(function () {
 });
 
 Route::prefix('customer/mako')->middleware('auth')->group(function () {
-    // Menampilkan daftar pesanan Mako konsumen
     Route::get('/', [PesananMakoController::class, 'index'])->name('customer.mako.index');
-
-    // Menampilkan formulir untuk membuat pemesanan Mako
     Route::get('/create', [PesananMakoController::class, 'create'])->name('customer.mako.create');
-
-    // Menyimpan pemesanan Mako
     Route::post('/create', [PesananMakoController::class, 'store'])->name('customer.mako.store');
-
-    // Menampilkan detail pesanan Mako
     Route::get('/detail/{id}', [PesananMakoController::class, 'show'])->name('customer.mako.show');
-
-    // Menampilkan form untuk mengedit pesanan Mako
     Route::get('/edit/{id}', [PesananMakoController::class, 'edit'])->name('customer.mako.edit');
-
-    // Mengupdate pesanan Mako
     Route::put('/edit/{id}', [PesananMakoController::class, 'update'])->name('customer.mako.update');
-
-    // Menghapus pesanan Mako
     Route::delete('/delete/{id}', [PesananMakoController::class, 'destroy'])->name('customer.mako.destroy');
+});
+
+Route::prefix('customer/pembayaran')->middleware(['auth'])->group(function () {
+    Route::get('/', [PembayaranMakoController::class, 'index'])->name('customer.pembayaran.index');
+    Route::get('/detail/{id}', [PembayaranMakoController::class, 'show'])->name('customer.pembayaran.show');
+    Route::get('/mako/{id}/pembayaran', [PembayaranMakoController::class, 'create'])->name('customer.pembayaran.create');
+    Route::post('/mako/{id}/pembayaran', [PembayaranMakoController::class, 'store'])->name('customer.pembayaran.store');
+    Route::delete('/delete/{id}', [PembayaranMakoController::class, 'destroy'])->name('customer.pembayaran.destroy');
+});
+
+Route::prefix('employee/barcode')->middleware('auth')->group(function () {
+    Route::get('/', [BarcodeController::class, 'index'])->name('employee.barcode.index');
+    Route::get('/create', [BarcodeController::class, 'create'])->name('employee.barcode.create');
+    Route::post('/create', [BarcodeController::class, 'store'])->name('employee.barcode.store');
+    Route::get('/detail/{id}', [BarcodeController::class, 'show'])->name('employee.barcode.show');
+    Route::get('/edit/{id}', [BarcodeController::class, 'edit'])->name('employee.barcode.edit');
+    Route::put('/edit/{id}', [BarcodeController::class, 'update'])->name('employee.barcode.update');
+    Route::delete('/delete/{id}', [BarcodeController::class, 'destroy'])->name('employee.barcode.destroy');
 });
 
 Route::prefix('employee/order')->middleware('auth')->group(function () {
@@ -64,4 +72,13 @@ Route::prefix('employee/order')->middleware('auth')->group(function () {
     Route::post('create', [PesananBahanBakuController::class, 'store'])->name('customer.order.store');
     Route::get('/detail/{id}', [PesananBahanBakuController::class, 'show'])->name('customer.order.show');
     Route::get('/detail/payment-status/{id}', [PesananBahanBakuController::class, 'showPaymentStatus'])->name('customer.order.paymentStatus');
+});
+
+Route::prefix('employee/persediaan')->middleware('auth')->group(function () {
+    Route::get('/', [PersediaanController::class, 'index'])->name('employee.persediaan.index');
+    Route::get('/create', [PersediaanController::class, 'create'])->name('employee.persediaan.create');
+    Route::post('/create', [PersediaanController::class, 'store'])->name('employee.persediaan.store');
+    Route::get('/edit/{id}', [PersediaanController::class, 'edit'])->name('employee.persediaan.edit');
+    Route::put('/edit/{id}', [PersediaanController::class, 'update'])->name('employee.persediaan.update');
+    Route::delete('/delete/{id}', [PersediaanController::class, 'destroy'])->name('employee.persediaan.destroy');
 });

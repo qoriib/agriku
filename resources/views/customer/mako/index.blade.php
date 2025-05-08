@@ -26,8 +26,8 @@
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $pesanan->formulirPemesananMako->jenis_mako }}</td>
-                    <td>{{ $pesanan->status }}</td>
-                    <td>{{ $pesanan->formulirPemesananMako->total_harga }}</td>
+                    <td>{{ ucfirst($pesanan->status) }}</td>
+                    <td>Rp {{ number_format($pesanan->formulirPemesananMako->total_harga, 0, ',', '.') }}</td>
                     <td>
                         <a href="{{ route('customer.mako.show', $pesanan->id) }}" class="btn btn-info btn-sm">Detail</a>
                         <a href="{{ route('customer.mako.edit', $pesanan->id) }}" class="btn btn-warning btn-sm">Edit</a>
@@ -36,6 +36,12 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                         </form>
+
+                        @if (!$pesanan->pembayaranMako)
+                            <a href="{{ route('customer.pembayaran.create', $pesanan->id) }}" class="btn btn-success btn-sm mt-1">Bayar Sekarang</a>
+                        @else
+                            <a href="{{ route('customer.pembayaran.show', $pesanan->pembayaranMako->id) }}" class="btn btn-secondary btn-sm mt-1">Lihat Pembayaran</a>
+                        @endif
                     </td>
                 </tr>
                 @endforeach
