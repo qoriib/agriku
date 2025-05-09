@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class FormulirPemesananBahanBaku extends Model
 {
+    use HasFactory;
+
     protected $table = 'formulir_pemesanan_bahan_baku';
 
     public function karyawan()

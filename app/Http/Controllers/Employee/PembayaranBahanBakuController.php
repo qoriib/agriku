@@ -1,141 +1,139 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Employee;
 
+use App\Http\Controllers\Controller;
 use App\Models\PembayaranBahanBaku;
 use App\Models\PesananBahanBaku;
-use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PembayaranBahanBakuController extends Controller
 {
-    /**
-     * Menampilkan daftar pembayaran bahan baku
-     */
     public function index()
     {
-        // Mengambil semua data pembayaran bahan baku
-        $pembayarans = PembayaranBahanBaku::with(['pesananBahanBaku', 'karyawan'])->get();
+        $pembayarans = PembayaranBahanBaku::with('pesananBahanBaku.formulirPemesanan')
+            ->where('id_karyawan', Auth::user()->karyawan->id)
+            ->latest()
+            ->get();
 
-        // Menampilkan halaman daftar pembayaran
-        return view('pembayaran.index', compact('pembayarans'));
+        return view('employee.pembayaran.index', compact('pembayarans'));
     }
 
-    /**
-     * Menampilkan form untuk membuat pembayaran baru
-     */
     public function create($pesanan_id)
     {
-        // Ambil pesanan berdasarkan ID
-        $pesanan = PesananBahanBaku::findOrFail($pesanan_id);
+        $pesanan = PesananBahanBaku::with('formulirPemesanan')->findOrFail($pesanan_id);
 
-        // Menampilkan form untuk membuat pembayaran
-        return view('pembayaran.create', compact('pesanan'));
+        if ($pesanan->id_karyawan !== Auth::user()->karyawan->id || $pesanan->pembayaranBahanBaku) {
+            abort(403, 'Tidak diizinkan.');
+        }
+
+        return view('employee.pembayaran.create', compact('pesanan'));
     }
 
-    /**
-     * Menyimpan data pembayaran bahan baku
-     */
-    public function store(Request $request)
+    public function store(Request $request, $pesanan_id)
     {
-        // Validasi input
+        $pesanan = PesananBahanBaku::findOrFail($pesanan_id);
+
+        if ($pesanan->id_karyawan !== Auth::user()->karyawan->id || $pesanan->pembayaranBahanBaku) {
+            abort(403);
+        }
+
         $validated = $request->validate([
             'no_rekening_penerima' => 'required|string',
             'nama_bank_penerima' => 'required|string',
             'nama_pengirim' => 'required|string',
             'nama_bank_pengirim' => 'required|string',
-            'bukti_pembayaran' => 'required|file|mimes:jpg,jpeg,png,pdf',
+            'bukti_pembayaran' => 'required|image|max:2048',
         ]);
 
-        // Simpan file bukti pembayaran
-        $path = $request->file('bukti_pembayaran')->store('public/pembayaran_bahan_baku');
+        $buktiPath = $request->file('bukti_pembayaran')->store('pembayaran_bahan_baku', 'public');
 
-        // Simpan data pembayaran ke database
         PembayaranBahanBaku::create([
-            'id_pesanan_bahan_baku' => $request->id_pesanan_bahan_baku,
+            'id_pesanan_bahan_baku' => $pesanan->id,
             'id_karyawan' => Auth::user()->karyawan->id,
             'no_rekening_penerima' => $validated['no_rekening_penerima'],
             'nama_bank_penerima' => $validated['nama_bank_penerima'],
             'nama_pengirim' => $validated['nama_pengirim'],
             'nama_bank_pengirim' => $validated['nama_bank_pengirim'],
-            'bukti_pembayaran' => $path,
-            'status' => 'menunggu pembayaran',  // Status awal
+            'bukti_pembayaran' => $buktiPath,
+            'status' => 'menunggu pembayaran',
         ]);
 
-        // Redirect ke halaman daftar pembayaran
-        return redirect()->route('pembayaran.index')->with('success', 'Pembayaran berhasil dibuat.');
+        return redirect()->route('employee.pembayaran.index')->with('success', 'Pembayaran berhasil dikirim.');
     }
 
-    /**
-     * Menampilkan detail pembayaran
-     */
     public function show($id)
     {
-        // Ambil data pembayaran berdasarkan ID
-        $pembayaran = PembayaranBahanBaku::with(['pesananBahanBaku', 'karyawan'])->findOrFail($id);
+        $pembayaran = PembayaranBahanBaku::with('pesananBahanBaku.formulirPemesanan')->findOrFail($id);
 
-        // Menampilkan detail pembayaran
-        return view('pembayaran.show', compact('pembayaran'));
+        if ($pembayaran->id_karyawan !== Auth::user()->karyawan->id) {
+            abort(403);
+        }
+
+        return view('employee.pembayaran.show', compact('pembayaran'));
     }
 
-    /**
-     * Menampilkan form untuk mengedit pembayaran
-     */
     public function edit($id)
     {
-        // Ambil data pembayaran untuk diedit
         $pembayaran = PembayaranBahanBaku::findOrFail($id);
 
-        // Menampilkan form edit pembayaran
-        return view('pembayaran.edit', compact('pembayaran'));
+        if ($pembayaran->id_karyawan !== Auth::user()->karyawan->id || $pembayaran->status === 'lunas') {
+            abort(403);
+        }
+
+        return view('employee.pembayaran.edit', compact('pembayaran'));
     }
 
-    /**
-     * Mengupdate data pembayaran
-     */
     public function update(Request $request, $id)
     {
-        // Validasi input
+        $pembayaran = PembayaranBahanBaku::findOrFail($id);
+
+        if ($pembayaran->id_karyawan !== Auth::user()->karyawan->id || $pembayaran->status === 'lunas') {
+            abort(403);
+        }
+
         $validated = $request->validate([
             'no_rekening_penerima' => 'required|string',
             'nama_bank_penerima' => 'required|string',
             'nama_pengirim' => 'required|string',
             'nama_bank_pengirim' => 'required|string',
-            'bukti_pembayaran' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            'bukti_pembayaran' => 'nullable|image|max:2048',
         ]);
 
-        // Ambil data pembayaran yang akan diupdate
-        $pembayaran = PembayaranBahanBaku::findOrFail($id);
-
-        // Jika ada bukti pembayaran baru, simpan file-nya
         if ($request->hasFile('bukti_pembayaran')) {
-            $path = $request->file('bukti_pembayaran')->store('public/pembayaran_bahan_baku');
-            $pembayaran->bukti_pembayaran = $path;
+            if ($pembayaran->bukti_pembayaran) {
+                Storage::disk('public')->delete($pembayaran->bukti_pembayaran);
+            }
+
+            $pembayaran->bukti_pembayaran = $request->file('bukti_pembayaran')->store('pembayaran_bahan_baku', 'public');
         }
 
-        // Update data pembayaran
         $pembayaran->update([
             'no_rekening_penerima' => $validated['no_rekening_penerima'],
             'nama_bank_penerima' => $validated['nama_bank_penerima'],
             'nama_pengirim' => $validated['nama_pengirim'],
             'nama_bank_pengirim' => $validated['nama_bank_pengirim'],
-            'status' => $request->status,  // Status pembayaran bisa diperbarui
         ]);
 
-        // Redirect ke halaman daftar pembayaran
-        return redirect()->route('pembayaran.index')->with('success', 'Pembayaran berhasil diperbarui.');
+        return redirect()->route('employee.pembayaran.index')->with('success', 'Pembayaran berhasil diperbarui.');
     }
 
-    /**
-     * Menghapus data pembayaran
-     */
     public function destroy($id)
     {
-        // Hapus data pembayaran
-        PembayaranBahanBaku::destroy($id);
+        $pembayaran = PembayaranBahanBaku::findOrFail($id);
 
-        // Redirect ke halaman daftar pembayaran
-        return redirect()->route('pembayaran.index')->with('success', 'Pembayaran berhasil dihapus.');
+        if ($pembayaran->id_karyawan !== Auth::user()->karyawan->id || $pembayaran->status === 'lunas') {
+            abort(403);
+        }
+
+        if ($pembayaran->bukti_pembayaran) {
+            Storage::disk('public')->delete($pembayaran->bukti_pembayaran);
+        }
+
+        $pembayaran->delete();
+
+        return redirect()->route('employee.pembayaran.index')->with('success', 'Pembayaran berhasil dihapus.');
     }
 }

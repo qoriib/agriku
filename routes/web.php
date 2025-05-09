@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\PemasokController;
 use App\Http\Controllers\Admin\KonsumenController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Customer\PembayaranMakoController;
-use App\Http\Controllers\Customer\PesananBahanBakuController;
+use App\Http\Controllers\Employee\PesananBahanBakuController;
 use App\Http\Controllers\Customer\PesananMakoController;
 use App\Http\Controllers\Employee\BarcodeController;
 use App\Http\Controllers\Employee\PengirimanMakoController;
@@ -15,6 +15,7 @@ use App\Http\Controllers\Employee\PersediaanController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Divisi\PesananMakoController as DivisiPesananMakoController;
 use App\Http\Controllers\Divisi\PembayaranMakoController as DivisiPembayaranMakoController;
+use App\Http\Controllers\Employee\PembayaranBahanBakuController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
@@ -24,14 +25,18 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/redirect-role', function () {
-    $role = Auth::user()->role;
+    $user = Auth::user();
+    $role = $user->role;
 
     return match ($role) {
         'admin' => redirect()->route('admin.karyawan.index'),
-        'karyawan' => redirect('/dashboard/karyawan'),
+        'kepala_divisi',
+        'staf_pengadaan',
+        'staf_produksi',
+        'staf_logistik' => redirect()->route('employee.barcode.index'),
         'pemasok' => redirect('/dashboard/pemasok'),
         'konsumen' => redirect()->route('customer.mako.index'),
-        default => abort(403),
+        default => abort(403, 'Peran tidak dikenali'),
     };
 })->middleware('auth');
 
@@ -84,12 +89,13 @@ Route::prefix('employee/barcode')->middleware('auth')->group(function () {
     Route::delete('/delete/{id}', [BarcodeController::class, 'destroy'])->name('employee.barcode.destroy');
 });
 
-Route::prefix('employee/order')->middleware('auth')->group(function () {
-    Route::get('/', [PesananBahanBakuController::class, 'index'])->name('customer.order.index');
-    Route::get('/create', [PesananBahanBakuController::class, 'create'])->name('customer.order.create');
-    Route::post('create', [PesananBahanBakuController::class, 'store'])->name('customer.order.store');
-    Route::get('/detail/{id}', [PesananBahanBakuController::class, 'show'])->name('customer.order.show');
-    Route::get('/detail/payment-status/{id}', [PesananBahanBakuController::class, 'showPaymentStatus'])->name('customer.order.paymentStatus');
+Route::prefix('employee/pengadaan')->middleware('auth')->group(function () {
+    Route::get('/pesanan', [PesananBahanBakuController::class, 'index'])->name('employee.pengadaan.index');
+    Route::get('/create', [PesananBahanBakuController::class, 'create'])->name('employee.pengadaan.create');
+    Route::post('/create', [PesananBahanBakuController::class, 'store'])->name('employee.pengadaan.store');
+    Route::get('/edit/{id}', [PesananBahanBakuController::class, 'edit'])->name('employee.pengadaan.edit');
+    Route::put('/edit/{id}', [PesananBahanBakuController::class, 'update'])->name('employee.pengadaan.update');
+    Route::delete('/delete/{id}', [PesananBahanBakuController::class, 'destroy'])->name('employee.pengadaan.destroy');
 });
 
 Route::prefix('employee/pengiriman')->middleware('auth')->group(function () {
@@ -109,4 +115,14 @@ Route::prefix('employee/persediaan')->middleware('auth')->group(function () {
     Route::get('/edit/{id}', [PersediaanController::class, 'edit'])->name('employee.persediaan.edit');
     Route::put('/edit/{id}', [PersediaanController::class, 'update'])->name('employee.persediaan.update');
     Route::delete('/delete/{id}', [PersediaanController::class, 'destroy'])->name('employee.persediaan.destroy');
+});
+
+Route::prefix('employee/pembayaran')->middleware('auth')->group(function () {
+    Route::get('/', [PembayaranBahanBakuController::class, 'index'])->name('employee.pembayaran.index');
+    Route::get('/create/{pesanan_id}', [PembayaranBahanBakuController::class, 'create'])->name('employee.pembayaran.create');
+    Route::post('/create/{pesanan_id}', [PembayaranBahanBakuController::class, 'store'])->name('employee.pembayaran.store');
+    Route::get('/detail/{id}', [PembayaranBahanBakuController::class, 'show'])->name('employee.pembayaran.show');
+    Route::get('/edit/{id}', [PembayaranBahanBakuController::class, 'edit'])->name('employee.pembayaran.edit');
+    Route::put('/edit/{id}', [PembayaranBahanBakuController::class, 'update'])->name('employee.pembayaran.update');
+    Route::delete('/delete/{id}', [PembayaranBahanBakuController::class, 'destroy'])->name('employee.pembayaran.destroy');
 });

@@ -11,7 +11,7 @@
 </h4>
 
 <div class="table-responsive">
-    <table class="table table-bordered table-striped align-middle">
+    <table class="table table-bordered align-middle">
         <thead class="table-light text-center">
             <tr>
                 <th>No</th>

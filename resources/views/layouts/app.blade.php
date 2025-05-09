@@ -19,11 +19,21 @@
                 @if($role === 'kepala_divisi')
                     <a class="btn btn-light" href="{{ route('divisi.pesanan.index') }}">Pesanan Mako</a>
                     <a class="btn btn-light" href="{{ route('divisi.pembayaran.index') }}">Pembayaran Mako</a>
-                @elseif(in_array($role, ['admin', 'staf_pengadaan', 'staf_produksi', 'staf_logistik']))
-                    <a class="btn btn-light" href="{{ route('employee.barcode.index') }}">Barcode</a>
+                @elseif($role === 'staf_produksi')
                     <a class="btn btn-light" href="{{ route('employee.persediaan.stok') }}">Daftar Persediaan</a>
                     <a class="btn btn-light" href="{{ route('employee.persediaan.riwayat') }}">Riwayat Persediaan</a>
-                    <a class="btn btn-light" href="{{ route('employee.pengiriman.index') }}">Pengiriman Mako</a>
+                    <a class="btn btn-light" href="{{ route('employee.barcode.index') }}">Barcode</a>
+                @elseif($role === 'staf_pengadaan')
+                    <a class="btn btn-light" href="{{ route('employee.pengadaan.index') }}">Pesanan Bahan Baku</a>
+                    <a class="btn btn-light" href="{{ route('employee.pembayaran.index') }}">Pembayaran Bahan Baku</a>
+                    <a class="btn btn-light" href="{{ route('employee.persediaan.stok') }}">Daftar Persediaan</a>
+                    <a class="btn btn-light" href="{{ route('employee.persediaan.riwayat') }}">Riwayat Persediaan</a>
+                    <a class="btn btn-light" href="{{ route('employee.barcode.index') }}">Barcode</a>
+                @elseif(in_array($role, ['admin', 'staf_logistik']))
+                <a class="btn btn-light" href="{{ route('employee.pengiriman.index') }}">Pengiriman Mako</a>
+                    <a class="btn btn-light" href="{{ route('employee.persediaan.stok') }}">Daftar Persediaan</a>
+                    <a class="btn btn-light" href="{{ route('employee.persediaan.riwayat') }}">Riwayat Persediaan</a>
+                    <a class="btn btn-light" href="{{ route('employee.barcode.index') }}">Barcode</a>
                 @elseif($role === 'konsumen')
                     <a class="btn btn-light" href="{{ route('customer.mako.index') }}">Pesanan Mako</a>
                     <a class="btn btn-light" href="{{ route('customer.pembayaran.index') }}">Pembayaran Mako</a>
