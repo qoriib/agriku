@@ -1,53 +1,67 @@
 @extends('layouts.app')
 
+@section('title', 'Edit Pesanan Mako')
+
 @section('content')
-<div class="container">
-    <h2>Edit Pesanan Mako</h2>
-    
-    <form action="{{ route('customer.mako.update', $pesanan->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        
-        <!-- Jenis Mako -->
-        <div class="mb-3">
-            <label for="jenis_mako" class="form-label">Jenis Mako</label>
-            <select class="form-select" name="jenis_mako" required>
-                <option value="raskin" {{ $pesanan->formulirPemesananMako->jenis_mako == 'raskin' ? 'selected' : '' }}>Raskin</option>
-                <option value="premium" {{ $pesanan->formulirPemesananMako->jenis_mako == 'premium' ? 'selected' : '' }}>Premium</option>
-            </select>
-        </div>
+<h4 class="mb-4">Edit Pesanan Mako</h4>
 
-        <!-- Quantity -->
-        <div class="mb-3">
-            <label for="qty" class="form-label">Jumlah (Qty)</label>
-            <input type="number" class="form-control" id="qty" name="qty" value="{{ $pesanan->formulirPemesananMako->qty }}" required>
-        </div>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0 mt-2">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
-        <!-- Tanggal Pemesanan -->
-        <div class="mb-3">
-            <label for="tanggal_pemesanan" class="form-label">Tanggal Pemesanan</label>
-            <input type="date" class="form-control" id="tanggal_pemesanan" name="tanggal_pemesanan" value="{{ $pesanan->formulirPemesananMako->tanggal_pemesanan }}" required>
-        </div>
+<div class="card">
+    <div class="card-body">
+        <form action="{{ route('customer.mako.update', $pesanan->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="vstack gap-3">
 
-        <!-- Alamat Pengiriman -->
-        <div class="mb-3">
-            <label for="alamat_pengiriman" class="form-label">Alamat Pengiriman</label>
-            <textarea class="form-control" id="alamat_pengiriman" name="alamat_pengiriman" rows="3" required>{{ $pesanan->formulirPemesananMako->alamat_pengiriman }}</textarea>
-        </div>
+                {{-- Jenis Mako --}}
+                <div>
+                    <label class="form-label">Jenis Mako</label>
+                    <select class="form-select" name="jenis_mako" required>
+                        <option value="raskin" {{ $pesanan->formulirPemesananMako->jenis_mako === 'raskin' ? 'selected' : '' }}>Raskin</option>
+                        <option value="premium" {{ $pesanan->formulirPemesananMako->jenis_mako === 'premium' ? 'selected' : '' }}>Premium</option>
+                    </select>
+                </div>
 
-        <!-- Harga -->
-        <div class="mb-3">
-            <label for="harga" class="form-label">Harga</label>
-            <input type="number" class="form-control" id="harga" name="harga" value="{{ $pesanan->formulirPemesananMako->harga }}" required>
-        </div>
+                {{-- Jumlah --}}
+                <div>
+                    <label class="form-label">Jumlah (Qty)</label>
+                    <input type="number" name="qty" class="form-control" value="{{ $pesanan->formulirPemesananMako->qty }}" required>
+                </div>
 
-        <!-- Pajak -->
-        <div class="mb-3">
-            <label for="pajak" class="form-label">Pajak</label>
-            <input type="number" class="form-control" id="pajak" name="pajak" value="{{ $pesanan->formulirPemesananMako->pajak }}" required>
-        </div>
+                {{-- Tanggal Pemesanan --}}
+                <div>
+                    <label class="form-label">Tanggal Pemesanan</label>
+                    <input type="date" name="tanggal_pemesanan" class="form-control" value="{{ $pesanan->formulirPemesananMako->tanggal_pemesanan }}" required>
+                </div>
 
-        <button type="submit" class="btn btn-primary">Update Pesanan</button>
-    </form>
+                {{-- Alamat Pengiriman --}}
+                <div>
+                    <label class="form-label">Alamat Pengiriman</label>
+                    <textarea name="alamat_pengiriman" class="form-control" rows="3" required>{{ $pesanan->formulirPemesananMako->alamat_pengiriman }}</textarea>
+                </div>
+
+                {{-- Harga --}}
+                <div>
+                    <label class="form-label">Harga per Unit</label>
+                    <input type="number" name="harga" class="form-control" value="{{ $pesanan->formulirPemesananMako->harga }}" required>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{{ route('customer.mako.index') }}" class="btn btn-secondary">Kembali</a>
+                    <button type="submit" class="btn btn-primary">Update Pesanan</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
 </div>
 @endsection

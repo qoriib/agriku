@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             BarcodeSeeder::class,
             PersediaanSeeder::class,
+            PesananMakoSeeder::class,
+            PembayaranMakoSeeder::class,
         ]);
     }
 }

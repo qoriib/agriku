@@ -13,10 +13,23 @@
     <div class="sidebar border-end">
         <h4 class="text-center py-4">Agriku</h4>
         <div class="vstack gap-3 px-4">
-            <a class="btn btn-light" href="{{ route('employee.barcode.index') }}">Barcode</a>
-            <a class="btn btn-light" href="{{ route('employee.persediaan.stok') }}">Daftar Persediaan</a>
-            <a class="btn btn-light" href="{{ route('employee.persediaan.riwayat') }}">Riwayat Persediaan</a>
-            <a class="btn btn-light" href="{{ route('employee.pengiriman.index') }}">Pengiriman Mako</a>
+            @auth
+                @php $role = Auth::user()->role; @endphp
+
+                @if(in_array($role, ['admin', 'kepala_divisi', 'staf_pengadaan', 'staf_produksi', 'staf_logistik']))
+                    <a class="btn btn-light" href="{{ route('employee.barcode.index') }}">Barcode</a>
+                    <a class="btn btn-light" href="{{ route('employee.persediaan.stok') }}">Daftar Persediaan</a>
+                    <a class="btn btn-light" href="{{ route('employee.persediaan.riwayat') }}">Riwayat Persediaan</a>
+                    <a class="btn btn-light" href="{{ route('employee.pengiriman.index') }}">Pengiriman Mako</a>
+                @elseif($role === 'konsumen')
+                    <a class="btn btn-light" href="{{ route('customer.mako.index') }}">Pesanan Mako</a>
+                    <a class="btn btn-light" href="{{ route('customer.pembayaran.index') }}">Pembayaran Mako</a>
+                @elseif($role === 'pemasok')
+                    <span class="text-muted small">Menu untuk pemasok belum ditambahkan</span>
+                @else
+                    <span class="text-muted small">Peran tidak dikenali</span>
+                @endif
+            @endauth
         </div>
     </div>
 

@@ -22,18 +22,17 @@ class PesananMakoController extends Controller
 
     public function create()
     {
-        $pemasoks = Pemasok::all(); // <- jika view Anda masih menggunakannya
-        return view('customer.mako.create', compact('pemasoks'));
+        return view('customer.mako.create');
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'jenis_mako' => 'required|in:raskin,premium',
-            'qty' => 'required|integer',
+            'qty' => 'required|integer|min:1',
             'tanggal_pemesanan' => 'required|date',
             'alamat_pengiriman' => 'required|string',
-            'harga' => 'required|numeric',
+            'harga' => 'required|numeric|min:1',
         ]);
 
         $total_harga = $validated['harga'] * $validated['qty'];
@@ -48,25 +47,13 @@ class PesananMakoController extends Controller
             'id_konsumen' => Auth::user()->konsumen->id,
         ]);
 
-        $pesanan = PesananMako::create([
+        PesananMako::create([
             'id_formulir_pemesanan_mako' => $formulir->id,
             'id_konsumen' => Auth::user()->konsumen->id,
             'status' => 'menunggu',
         ]);
 
-        return redirect()->route('customer.mako.show', $pesanan->id)->with('success', 'Pesanan berhasil dibuat.');
-    }
-
-    public function show($id)
-    {
-        $pesanan = PesananMako::with('formulirPemesananMako')->findOrFail($id);
-
-        // Batasi akses hanya konsumen terkait
-        if ($pesanan->id_konsumen !== Auth::user()->konsumen->id) {
-            abort(403);
-        }
-
-        return view('customer.mako.show', compact('pesanan'));
+        return redirect()->route('customer.mako.index')->with('success', 'Pesanan berhasil dibuat.');
     }
 
     public function edit($id)
@@ -84,10 +71,10 @@ class PesananMakoController extends Controller
     {
         $validated = $request->validate([
             'jenis_mako' => 'required|in:raskin,premium',
-            'qty' => 'required|integer',
+            'qty' => 'required|integer|min:1',
             'tanggal_pemesanan' => 'required|date',
             'alamat_pengiriman' => 'required|string',
-            'harga' => 'required|numeric',
+            'harga' => 'required|numeric|min:1',
         ]);
 
         $total_harga = $validated['harga'] * $validated['qty'];
@@ -107,10 +94,9 @@ class PesananMakoController extends Controller
             'total_harga' => $total_harga,
         ]);
 
-        $pesanan->status = 'menunggu';
-        $pesanan->save();
+        $pesanan->update(['status' => 'menunggu']);
 
-        return redirect()->route('customer.mako.show', $pesanan->id)->with('success', 'Pesanan berhasil diperbarui.');
+        return redirect()->route('customer.mako.index')->with('success', 'Pesanan berhasil diperbarui.');
     }
 
     public function destroy($id)

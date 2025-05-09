@@ -43,7 +43,6 @@ Route::prefix('customer/mako')->middleware('auth')->group(function () {
     Route::get('/', [PesananMakoController::class, 'index'])->name('customer.mako.index');
     Route::get('/create', [PesananMakoController::class, 'create'])->name('customer.mako.create');
     Route::post('/create', [PesananMakoController::class, 'store'])->name('customer.mako.store');
-    Route::get('/detail/{id}', [PesananMakoController::class, 'show'])->name('customer.mako.show');
     Route::get('/edit/{id}', [PesananMakoController::class, 'edit'])->name('customer.mako.edit');
     Route::put('/edit/{id}', [PesananMakoController::class, 'update'])->name('customer.mako.update');
     Route::delete('/delete/{id}', [PesananMakoController::class, 'destroy'])->name('customer.mako.destroy');

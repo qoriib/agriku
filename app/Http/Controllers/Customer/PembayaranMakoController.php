@@ -74,7 +74,7 @@ class PembayaranMakoController extends Controller
             'status' => 'menunggu pembayaran',
         ]);
 
-        return redirect()->route('customer.mako.show', $pesanan->id)->with('success', 'Pembayaran berhasil dikirim.');
+        return redirect()->route('customer.pembayaran.index', $pesanan->id)->with('success', 'Pembayaran berhasil dikirim.');
     }
 
     /**

@@ -2,55 +2,74 @@
 
 namespace Database\Seeders;
 
-use App\Models\Karyawan;
-use App\Models\Konsumen;
-use App\Models\Pemasok;
 use App\Models\User;
+use App\Models\Karyawan;
+use App\Models\Pemasok;
+use App\Models\Konsumen;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        /// Admin
-        User::create([
-            'name' => 'Admin Utama',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('admin123'),
-            'role' => 'admin'
-        ]);
+        $passwords = [
+            'admin' => 'admin123',
+            'kepala_divisi' => 'kepala123',
+            'staf_pengadaan' => 'pengadaan123',
+            'staf_produksi' => 'produksi123',
+            'staf_logistik' => 'logistik123',
+            'pemasok' => 'pemasok123',
+            'konsumen' => 'konsumen123',
+        ];
 
-        // Karyawan
-        User::factory(5)->create([
-            'role' => 'staf_pengadaan'
-        ])->each(function ($user) {
-            $user->karyawan()->create(
-                Karyawan::factory()->make([
-                    'jabatan' => 'staf_pengadaan'
-                ])->toArray()
-            );
-        });
+        // === Admin ===
+        for ($i = 1; $i <= 2; $i++) {
+            User::factory()->create([
+                'email' => "admin{$i}@agriku.com",
+                'password' => bcrypt($passwords['admin']),
+                'role' => 'admin',
+            ]);
+        }
 
-        // Pemasok
-        User::factory(3)->create([
-            'role' => 'pemasok'
-        ])->each(function ($user) {
-            $user->pemasok()->create(
-                Pemasok::factory()->make()->toArray()
-            );
-        });
+        // === Karyawan (kepala_divisi, staf_pengadaan, staf_produksi, staf_logistik) ===
+        $karyawanRoles = ['kepala_divisi', 'staf_pengadaan', 'staf_produksi', 'staf_logistik'];
 
-        // Konsumen
-        User::factory(5)->create([
-            'role' => 'konsumen',
-            'password' => bcrypt('konsumen123'),
-        ])->each(function ($user) {
-            $user->konsumen()->create(
-                Konsumen::factory()->make()->toArray()
-            );
-        });
+        foreach ($karyawanRoles as $role) {
+            for ($i = 1; $i <= 2; $i++) {
+                $user = User::factory()->create([
+                    'email' => "{$role}{$i}@agriku.com",
+                    'password' => bcrypt($passwords[$role]),
+                    'role' => $role,
+                ]);
+
+                $user->karyawan()->create(
+                    Karyawan::factory()->make([
+                        'jabatan' => str_replace('_', ' ', $role),
+                    ])->toArray()
+                );
+            }
+        }
+
+        // === Pemasok ===
+        for ($i = 1; $i <= 2; $i++) {
+            $user = User::factory()->create([
+                'email' => "pemasok{$i}@agriku.com",
+                'password' => bcrypt($passwords['pemasok']),
+                'role' => 'pemasok',
+            ]);
+
+            $user->pemasok()->create(Pemasok::factory()->make()->toArray());
+        }
+
+        // === Konsumen ===
+        for ($i = 1; $i <= 2; $i++) {
+            $user = User::factory()->create([
+                'email' => "konsumen{$i}@agriku.com",
+                'password' => bcrypt($passwords['konsumen']),
+                'role' => 'konsumen',
+            ]);
+
+            $user->konsumen()->create(Konsumen::factory()->make()->toArray());
+        }
     }
 }
