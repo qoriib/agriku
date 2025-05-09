@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             PersediaanSeeder::class,
             PesananMakoSeeder::class,
             PembayaranMakoSeeder::class,
+            PengirimanMakoSeeder::class,
         ]);
     }
 }

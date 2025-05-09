@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('id_konsumen')->constrained('konsumens')->onDelete('cascade');
             $table->foreignId('id_karyawan')->constrained('karyawans')->onDelete('cascade');
             $table->timestamp('estimasi_sampai');
-            $table->string('bukti_pesanan_diterima');
+            $table->string('bukti_pesanan_diterima')->nullable();
             $table->enum('status', ['dikirim', 'diterima']);
             $table->timestamps();
         });

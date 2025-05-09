@@ -27,6 +27,7 @@
                 @elseif($role === 'konsumen')
                     <a class="btn btn-light" href="{{ route('customer.mako.index') }}">Pesanan Mako</a>
                     <a class="btn btn-light" href="{{ route('customer.pembayaran.index') }}">Pembayaran Mako</a>
+                    <a class="btn btn-light" href="{{ route('customer.pengiriman.index') }}">Pantau Pengiriman</a>
                 @elseif($role === 'pemasok')
                     <span class="text-muted small">Menu untuk pemasok belum ditambahkan</span>
                 @else

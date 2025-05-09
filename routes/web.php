@@ -69,6 +69,12 @@ Route::prefix('customer/pembayaran')->middleware(['auth'])->group(function () {
     Route::delete('/delete/{id}', [PembayaranMakoController::class, 'destroy'])->name('customer.pembayaran.destroy');
 });
 
+Route::prefix('customer')->middleware(['auth'])->group(function () {
+    Route::get('/pengiriman', [\App\Http\Controllers\Customer\PengirimanMakoController::class, 'index'])->name('customer.pengiriman.index');
+    Route::get('/konfirmasi/{id}', [\App\Http\Controllers\Customer\PengirimanMakoController::class, 'showKonfirmasi'])->name('customer.pengiriman.konfirmasi.form');
+    Route::post('/konfirmasi/{id}', [\App\Http\Controllers\Customer\PengirimanMakoController::class, 'prosesKonfirmasi'])->name('customer.pengiriman.konfirmasi.submit');
+});
+
 Route::prefix('employee/barcode')->middleware('auth')->group(function () {
     Route::get('/', [BarcodeController::class, 'index'])->name('employee.barcode.index');
     Route::get('/create', [BarcodeController::class, 'create'])->name('employee.barcode.create');
