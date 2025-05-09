@@ -30,7 +30,7 @@
                     <a class="btn btn-light" href="{{ route('employee.persediaan.riwayat') }}">Riwayat Persediaan</a>
                     <a class="btn btn-light" href="{{ route('employee.barcode.index') }}">Barcode</a>
                 @elseif(in_array($role, ['admin', 'staf_logistik']))
-                <a class="btn btn-light" href="{{ route('employee.pengiriman.index') }}">Pengiriman Mako</a>
+                    <a class="btn btn-light" href="{{ route('employee.pengiriman.index') }}">Pengiriman Mako</a>
                     <a class="btn btn-light" href="{{ route('employee.persediaan.stok') }}">Daftar Persediaan</a>
                     <a class="btn btn-light" href="{{ route('employee.persediaan.riwayat') }}">Riwayat Persediaan</a>
                     <a class="btn btn-light" href="{{ route('employee.barcode.index') }}">Barcode</a>
@@ -39,7 +39,8 @@
                     <a class="btn btn-light" href="{{ route('customer.pembayaran.index') }}">Pembayaran Mako</a>
                     <a class="btn btn-light" href="{{ route('customer.pengiriman.index') }}">Pantau Pengiriman</a>
                 @elseif($role === 'pemasok')
-                    <span class="text-muted small">Menu untuk pemasok belum ditambahkan</span>
+                    <a class="btn btn-light" href="{{ route('supplier.pesanan.index') }}">Pesanan Bahan Baku</a>
+                    <a class="btn btn-light" href="{{ route('supplier.pembayaran.index') }}">Pembayaran Bahan Baku</a>
                 @else
                     <span class="text-muted small">Peran tidak dikenali</span>
                 @endif

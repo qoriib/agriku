@@ -34,7 +34,7 @@ Route::get('/redirect-role', function () {
         'staf_pengadaan',
         'staf_produksi',
         'staf_logistik' => redirect()->route('employee.barcode.index'),
-        'pemasok' => redirect('/dashboard/pemasok'),
+        'pemasok' => redirect()->route('supplier.pesanan.index'),
         'konsumen' => redirect()->route('customer.mako.index'),
         default => abort(403, 'Peran tidak dikenali'),
     };
@@ -125,4 +125,18 @@ Route::prefix('employee/pembayaran')->middleware('auth')->group(function () {
     Route::get('/edit/{id}', [PembayaranBahanBakuController::class, 'edit'])->name('employee.pembayaran.edit');
     Route::put('/edit/{id}', [PembayaranBahanBakuController::class, 'update'])->name('employee.pembayaran.update');
     Route::delete('/delete/{id}', [PembayaranBahanBakuController::class, 'destroy'])->name('employee.pembayaran.destroy');
+});
+
+Route::prefix('supplier/pesanan')->middleware('auth')->group(function () {
+    Route::get('/', [App\Http\Controllers\Supplier\PesananBahanBakuController::class, 'index'])->name('supplier.pesanan.index');
+    Route::get('/edit/{id}', [App\Http\Controllers\Supplier\PesananBahanBakuController::class, 'edit'])->name('supplier.pesanan.edit');
+    Route::put('/edit/{id}', [App\Http\Controllers\Supplier\PesananBahanBakuController::class, 'update'])->name('supplier.pesanan.update');
+    Route::put('/edit-status/{id}', [App\Http\Controllers\Supplier\PesananBahanBakuController::class, 'updateStatus'])->name('supplier.pesanan.updateStatus');
+    Route::delete('/delete/{id}', [App\Http\Controllers\Supplier\PesananBahanBakuController::class, 'destroy'])->name('supplier.pesanan.destroy');
+});
+
+Route::prefix('supplier/pembayaran')->middleware('auth')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Supplier\PembayaranBahanBakuController::class, 'index'])->name('supplier.pembayaran.index');
+    Route::get('/edit/{id}', [\App\Http\Controllers\Supplier\PembayaranBahanBakuController::class, 'edit'])->name('supplier.pembayaran.edit');
+    Route::put('/edit/{id}', [\App\Http\Controllers\Supplier\PembayaranBahanBakuController::class, 'update'])->name('supplier.pembayaran.update');
 });
