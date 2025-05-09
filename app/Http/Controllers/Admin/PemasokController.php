@@ -27,6 +27,7 @@ class PemasokController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'nama_perusahaan' => 'required',
+            'bahan_baku' => 'required',
             'password' => 'required|min:6',
         ]);
 
@@ -39,8 +40,8 @@ class PemasokController extends Controller
 
         $user->pemasok()->create([
             'nama_perusahaan' => $request->nama_perusahaan,
+            'bahan_baku' => $request->bahan_baku,
             'no_telp' => $request->no_telp,
-            'alamat' => $request->alamat,
         ]);
 
         return redirect()->route('admin.pemasok.index')->with('success', 'Data pemasok berhasil ditambahkan.');
@@ -53,14 +54,30 @@ class PemasokController extends Controller
 
     public function update(Request $request, Pemasok $pemasok)
     {
-        $pemasok->update($request->only(['nama_perusahaan', 'no_telp', 'alamat']));
-        $pemasok->user->update($request->only(['name', 'email']));
-        return redirect()->route('admin.pemasok.index')->with('success', 'Data pemasok diperbarui.');
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'nama_perusahaan' => 'required',
+            'bahan_baku' => 'required',
+        ]);
+
+        $pemasok->update([
+            'nama_perusahaan' => $request->nama_perusahaan,
+            'bahan_baku' => $request->bahan_baku,
+            'no_telp' => $request->no_telp,
+        ]);
+
+        $pemasok->user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        return redirect()->route('admin.pemasok.index')->with('success', 'Data pemasok berhasil diperbarui.');
     }
 
     public function destroy(Pemasok $pemasok)
     {
         $pemasok->user()->delete();
-        return redirect()->route('admin.pemasok.index')->with('success', 'Data pemasok dihapus.');
+        return redirect()->route('admin.pemasok.index')->with('success', 'Data pemasok berhasil dihapus.');
     }
 }

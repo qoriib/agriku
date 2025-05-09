@@ -9,7 +9,14 @@ class Pemasok extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'nama_perusahaan', 'no_telp', 'alamat'];
+    protected $table = 'pemasoks';
+
+    protected $fillable = [
+        'user_id',
+        'nama_perusahaan',
+        'bahan_baku',
+        'no_telp',
+    ];
 
     public function user()
     {

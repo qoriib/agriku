@@ -18,8 +18,8 @@ class PemasokFactory extends Factory
     {
         return [
             'nama_perusahaan' => $this->faker->company(),
+            'bahan_baku' => $this->faker->randomElement(['Gula', 'Tepung', 'Beras', 'Garam']),
             'no_telp' => $this->faker->phoneNumber(),
-            'alamat' => $this->faker->address(),
         ];
     }
 }

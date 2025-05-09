@@ -3,28 +3,56 @@
 @section('title', 'Edit Pemasok')
 
 @section('content')
-<h4>Edit Pemasok</h4>
-<form method="POST" action="{{ route('admin.pemasok.update', $pemasok->id) }}">
-    @csrf @method('PUT')
-    <div class="row mb-3">
-        <div class="col">
-            <label>Nama</label>
-            <input type="text" name="name" value="{{ $pemasok->user->name }}" class="form-control" required>
+    <h4 class="mb-4">Form Edit Pemasok</h4>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-        <div class="col">
-            <label>Email</label>
-            <input type="email" name="email" value="{{ $pemasok->user->email }}" class="form-control" required>
+    @endif
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ route('admin.pemasok.update', $pemasok->id) }}">
+                @csrf
+                @method('PUT')
+
+                <div class="vstack gap-3">
+                    <div>
+                        <label class="form-label">Nama</label>
+                        <input type="text" name="name" value="{{ old('name', $pemasok->user->name) }}" class="form-control" required>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" value="{{ old('email', $pemasok->user->email) }}" class="form-control" required>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Nama Perusahaan</label>
+                        <input type="text" name="nama_perusahaan" value="{{ old('nama_perusahaan', $pemasok->nama_perusahaan) }}" class="form-control" required>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Bahan Baku</label>
+                        <input type="text" name="bahan_baku" value="{{ old('bahan_baku', $pemasok->bahan_baku) }}" class="form-control" required>
+                    </div>
+
+                    <div>
+                        <label class="form-label">No. Telp</label>
+                        <input type="text" name="no_telp" value="{{ old('no_telp', $pemasok->no_telp) }}" class="form-control">
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ route('admin.pemasok.index') }}" class="btn btn-secondary">Batal</a>
+                        <button class="btn btn-success">Update</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="mb-3">
-        <label>No. Telp</label>
-        <input type="text" name="no_telp" value="{{ $pemasok->no_telp }}" class="form-control">
-    </div>
-    <div class="mb-3">
-        <label>Alamat</label>
-        <textarea name="alamat" class="form-control">{{ $pemasok->alamat }}</textarea>
-    </div>
-    <button class="btn btn-success">Update</button>
-    <a href="{{ route('admin.pemasok.index') }}" class="btn btn-secondary">Batal</a>
-</form>
 @endsection

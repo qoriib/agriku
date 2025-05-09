@@ -3,28 +3,50 @@
 @section('title', 'Edit Konsumen')
 
 @section('content')
-<h4>Edit Konsumen</h4>
-<form method="POST" action="{{ route('admin.konsumen.update', $konsuman->id) }}">
-    @csrf @method('PUT')
-    <div class="row mb-3">
-        <div class="col">
-            <label>Nama</label>
-            <input type="text" name="name" value="{{ $konsuman->user->name }}" class="form-control" required>
+    <h4 class="mb-4">Form Edit Konsumen</h4>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-        <div class="col">
-            <label>Email</label>
-            <input type="email" name="email" value="{{ $konsuman->user->email }}" class="form-control" required>
+    @endif
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ route('admin.konsumen.update', $konsuman->id) }}">
+                @csrf @method('PUT')
+                <div class="vstack gap-3">
+                    <div class="row">
+                        <div class="col">
+                            <label class="form-label">Nama</label>
+                            <input type="text" name="name" value="{{ old('name', $konsuman->user->name) }}" class="form-control" required>
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" value="{{ old('email', $konsuman->user->email) }}" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="form-label">No. Telp</label>
+                        <input type="text" name="no_telp" value="{{ old('no_telp', $konsuman->no_telp) }}" class="form-control">
+                    </div>
+
+                    <div>
+                        <label class="form-label">Alamat</label>
+                        <textarea name="alamat" class="form-control" rows="3">{{ old('alamat', $konsuman->alamat) }}</textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ route('admin.konsumen.index') }}" class="btn btn-secondary">Batal</a>
+                        <button class="btn btn-success">Update</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="mb-3">
-        <label>No. Telp</label>
-        <input type="text" name="no_telp" value="{{ $konsuman->no_telp }}" class="form-control">
-    </div>
-    <div class="mb-3">
-        <label>Alamat</label>
-        <textarea name="alamat" class="form-control">{{ $konsuman->alamat }}</textarea>
-    </div>
-    <button class="btn btn-success">Update</button>
-    <a href="{{ route('admin.konsumen.index') }}" class="btn btn-secondary">Batal</a>
-</form>
 @endsection

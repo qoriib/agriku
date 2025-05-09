@@ -5,7 +5,7 @@
 @section('content')
     <div class="mb-4 d-flex justify-content-between align-items-center">
         <h4 class="mb-0">Daftar Karyawan</h4>
-        <a href="{{ route('admin.karyawan.create') }}" class="btn btn-primary">
+        <a href="{{ route('admin.karyawan.create') }}" class="btn btn-primary btn-sm">
             Tambah Karyawan
         </a>
     </div>

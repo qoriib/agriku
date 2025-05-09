@@ -42,9 +42,7 @@ class UserSeeder extends Seeder
                     'role' => $role,
                 ]);
 
-                $user->karyawan()->create(
-                    Karyawan::factory()->make()->toArray()
-                );
+                $user->karyawan()->create(Karyawan::factory()->make()->toArray());
             }
         }
 
