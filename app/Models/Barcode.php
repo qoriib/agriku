@@ -12,10 +12,14 @@ class Barcode extends Model
     protected $table = 'barcode';
 
     protected $fillable = [
-        'kode_produk', 'nama_produk', 'satuan', 'kategori_produk', 'gudang',
+        'kode_produk',
+        'nama_produk',
+        'satuan',
+        'kategori_produk',
+        'gudang',
     ];
 
-    public function persediaan()
+    public function persediaans()
     {
         return $this->hasMany(Persediaan::class, 'id_barcode');
     }

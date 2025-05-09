@@ -1,40 +1,62 @@
 @extends('layouts.app')
 
+@section('title', 'Tambah Transaksi Persediaan')
+
 @section('content')
-<div class="container">
-    <h2>Tambah Transaksi Persediaan</h2>
+    <h4 class="mb-4">Form Tambah Transaksi Persediaan</h4>
 
-    <form action="{{ route('employee.persediaan.store') }}" method="POST">
-        @csrf
-
-        <div class="mb-3">
-            <label>Produk</label>
-            <select name="id_barcode" class="form-control" required>
-                @foreach($barcodes as $barcode)
-                    <option value="{{ $barcode->id }}">{{ $barcode->nama_produk }} ({{ $barcode->kode_produk }})</option>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
                 @endforeach
-            </select>
+            </ul>
         </div>
+    @endif
 
-        <div class="mb-3">
-            <label>Tipe</label>
-            <select name="tipe" class="form-control" required>
-                <option value="masuk">Masuk</option>
-                <option value="keluar">Keluar</option>
-            </select>
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ route('employee.persediaan.store') }}" method="POST">
+                @csrf
+                <div class="vstack gap-3">
+                    <div>
+                        <label class="form-label">Produk</label>
+                        <select name="id_barcode" class="form-select" required>
+                            <option disabled selected>Pilih produk</option>
+                            @foreach($barcodes as $barcode)
+                                <option value="{{ $barcode->id }}" {{ old('id_barcode') == $barcode->id ? 'selected' : '' }}>
+                                    {{ $barcode->nama_produk }} ({{ $barcode->kode_produk }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Tipe Transaksi</label>
+                        <select name="tipe" class="form-select" required>
+                            <option disabled selected>Pilih tipe</option>
+                            <option value="masuk" {{ old('tipe') == 'masuk' ? 'selected' : '' }}>Masuk</option>
+                            <option value="keluar" {{ old('tipe') == 'keluar' ? 'selected' : '' }}>Keluar</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Jumlah Produk</label>
+                        <input type="number" name="qty_produk" class="form-control" min="1" value="{{ old('qty_produk') }}" required>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Tanggal Transaksi</label>
+                        <input type="date" name="tanggal" class="form-control" value="{{ old('tanggal') }}" required>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ route('employee.persediaan.riwayat') }}" class="btn btn-secondary">Kembali</a>
+                        <button class="btn btn-primary">Simpan</button>
+                    </div>
+                </div>
+            </form>
         </div>
-
-        <div class="mb-3">
-            <label>Qty Produk</label>
-            <input type="number" name="qty_produk" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-            <label>Tanggal Transaksi</label>
-            <input type="date" name="tanggal" class="form-control" required>
-        </div>
-
-        <button class="btn btn-primary">Simpan</button>
-    </form>
-</div>
+    </div>
 @endsection

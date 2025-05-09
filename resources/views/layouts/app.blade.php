@@ -14,7 +14,8 @@
         <h4 class="text-center py-4">Agriku</h4>
         <div class="vstack gap-3 px-4">
             <a class="btn btn-light" href="{{ route('employee.barcode.index') }}">Barcode</a>
-            <a class="btn btn-light" href="{{ route('employee.persediaan.index') }}">Persediaan</a>
+            <a class="btn btn-light" href="{{ route('employee.persediaan.stok') }}">Daftar Persediaan</a>
+            <a class="btn btn-light" href="{{ route('employee.persediaan.riwayat') }}">Riwayat Persediaan</a>
             <a class="btn btn-light" href="{{ route('employee.pengiriman.index') }}">Pengiriman Mako</a>
         </div>
     </div>

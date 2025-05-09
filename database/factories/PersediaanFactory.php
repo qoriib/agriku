@@ -24,7 +24,6 @@ class PersediaanFactory extends Factory
             'tipe' => $tipe,
             'qty_produk' => $qty,
             'tanggal' => $tanggal,
-            'qty_sisa' => $tipe === 'masuk' ? $qty : 0,
         ];
     }
 }

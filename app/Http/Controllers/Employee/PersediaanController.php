@@ -9,10 +9,35 @@ use Illuminate\Http\Request;
 
 class PersediaanController extends Controller
 {
-    public function index()
+    // Menampilkan stok akhir setiap produk
+    public function stok()
     {
-        $persediaans = Persediaan::with('barcode')->orderBy('tanggal', 'desc')->get();
-        return view('employee.persediaan.index', compact('persediaans'));
+        $barcodes = Barcode::with(['persediaans' => function ($q) {
+            $q->orderByDesc('tanggal');
+        }])->get();
+
+        // Ambil hanya stok terbaru per produk
+        $stokData = $barcodes->map(function ($barcode) {
+            $latest = $barcode->persediaans->first();
+            return [
+                'barcode' => $barcode,
+                'qty_sisa' => $latest?->qty_sisa ?? 0,
+                'tanggal' => $latest?->tanggal ?? '-',
+            ];
+        });
+
+        return view('employee.persediaan.stok', compact('stokData'));
+    }
+
+    // Menampilkan riwayat persediaan lengkap
+    public function riwayat()
+    {
+        $persediaans = Persediaan::with('barcode')
+            ->orderByDesc('tanggal')
+            ->orderByDesc('id')
+            ->get();
+
+        return view('employee.persediaan.riwayat', compact('persediaans'));
     }
 
     public function create()
@@ -45,7 +70,7 @@ class PersediaanController extends Controller
 
         Persediaan::create($validated);
 
-        return redirect()->route('employee.persediaan.index')->with('success', 'Data persediaan berhasil ditambahkan.');
+        return redirect()->route('employee.persediaan.riwayat')->with('success', 'Data persediaan berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -85,7 +110,7 @@ class PersediaanController extends Controller
 
         $persediaan->update($validated);
 
-        return redirect()->route('employee.persediaan.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect()->route('employee.persediaan.riwayat')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -93,6 +118,6 @@ class PersediaanController extends Controller
         $persediaan = Persediaan::findOrFail($id);
         $persediaan->delete();
 
-        return redirect()->route('employee.persediaan.index')->with('success', 'Data berhasil dihapus.');
+        return redirect()->route('employee.persediaan.riwayat')->with('success', 'Data berhasil dihapus.');
     }
 }

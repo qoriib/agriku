@@ -84,7 +84,8 @@ Route::prefix('employee/pengiriman')->middleware('auth')->group(function () {
 });
 
 Route::prefix('employee/persediaan')->middleware('auth')->group(function () {
-    Route::get('/', [PersediaanController::class, 'index'])->name('employee.persediaan.index');
+    Route::get('/stok', [PersediaanController::class, 'stok'])->name('employee.persediaan.stok');
+    Route::get('/riwayat', [PersediaanController::class, 'riwayat'])->name('employee.persediaan.riwayat');
     Route::get('/create', [PersediaanController::class, 'create'])->name('employee.persediaan.create');
     Route::post('/create', [PersediaanController::class, 'store'])->name('employee.persediaan.store');
     Route::get('/edit/{id}', [PersediaanController::class, 'edit'])->name('employee.persediaan.edit');

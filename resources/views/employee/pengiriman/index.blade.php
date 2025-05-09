@@ -1,20 +1,25 @@
 @extends('layouts.app')
 
+@section('title', 'Data Pengiriman Mako')
+
 @section('content')
-<div class="container">
-    <h2>Daftar Pengiriman Mako</h2>
+<h4 class="mb-4 d-flex justify-content-between">
+    <span>Daftar Pengiriman Mako</span>
+    <a href="{{ route('employee.pengiriman.create') }}" class="btn btn-success btn-sm">
+         Tambah Pengiriman
+    </a>
+</h4>
 
-    <a href="{{ route('employee.pengiriman.create') }}" class="btn btn-primary mb-3">Tambah Pengiriman</a>
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    <table class="table table-bordered">
-        <thead>
+<div class="table-responsive">
+    <table class="table table-bordered align-middle">
+        <thead class="table-light text-center">
             <tr>
+                <th>No</th>
                 <th>Pesanan</th>
-                <th>Konsumen</th>
                 <th>Estimasi Sampai</th>
                 <th>Status</th>
                 <th>Bukti</th>
@@ -22,29 +27,30 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($pengirimans as $pengiriman)
+            @foreach($pengirimans as $i => $item)
             <tr>
-                <td>{{ $pengiriman->pesananMako->formulirPemesananMako->jenis_mako }}</td>
-                <td>{{ $pengiriman->pesananMako->konsumen->user->name ?? '-' }}</td>
-                <td>{{ $pengiriman->estimasi_sampai }}</td>
+                <td class="text-center">{{ $i + 1 }}</td>
+                <td>{{ $item->pesananMako->formulirPemesananMako->jenis_mako ?? '-' }}</td>
+                <td>{{ $item->estimasi_sampai }}</td>
                 <td>
-                    <span class="badge bg-{{ $pengiriman->status === 'diterima' ? 'success' : ($pengiriman->status === 'terlambat' ? 'danger' : 'warning') }}">
-                        {{ ucfirst($pengiriman->status) }}
-                    </span>
+                    <span class="badge bg-{{ [
+                        'dikirim' => 'warning',
+                        'terlambat' => 'danger',
+                        'diterima' => 'success'
+                    ][$item->status] ?? 'secondary' }}">{{ ucfirst($item->status) }}</span>
                 </td>
-                <td>
-                    @if ($pengiriman->bukti_pesanan_diterima)
-                        <a href="{{ asset('storage/' . $pengiriman->bukti_pesanan_diterima) }}" target="_blank">Lihat</a>
+                <td class="text-center">
+                    @if($item->bukti_pesanan_diterima)
+                        <a href="{{ asset('storage/' . $item->bukti_pesanan_diterima) }}" target="_blank" class="btn btn-outline-secondary btn-sm">Lihat</a>
                     @else
-                        -
+                        <em class="text-muted">Belum ada</em>
                     @endif
                 </td>
-                <td>
-                    <a href="{{ route('employee.pengiriman.edit', $pengiriman->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                    <form action="{{ route('employee.pengiriman.destroy', $pengiriman->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger btn-sm">Hapus</button>
+                <td class="text-nowrap text-center">
+                    <a href="{{ route('employee.pengiriman.edit', $item->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                    <form action="{{ route('employee.pengiriman.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?')">
+                        @csrf @method('DELETE')
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
                     </form>
                 </td>
             </tr>

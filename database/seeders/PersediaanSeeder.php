@@ -5,52 +5,60 @@ namespace Database\Seeders;
 use App\Models\Barcode;
 use App\Models\Persediaan;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 
 class PersediaanSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
+        $startDate = Carbon::now()->subDays(30); // mulai dari 30 hari lalu
+
         foreach (Barcode::all() as $barcode) {
             $qty_sisa = 0;
+            $tanggal = clone $startDate;
 
-            // Buat 5 riwayat masuk/keluar berdasarkan tanggal
-            $riwayats = collect();
-
-            for ($i = 0; $i < 5; $i++) {
-                $tipe = Arr::random(['masuk', 'keluar']);
-                $qty = rand(10, 50);
-                $tanggal = now()->subDays(rand(0, 60))->format('Y-m-d');
-
-                $riwayats->push([
-                    'tipe' => $tipe,
+            // Generate 3 transaksi masuk
+            $masukList = [];
+            for ($i = 0; $i < 3; $i++) {
+                $qty = rand(20, 50);
+                $masukList[] = [
+                    'id_barcode' => $barcode->id,
+                    'tipe' => 'masuk',
                     'qty_produk' => $qty,
-                    'tanggal' => $tanggal,
-                ]);
+                    'tanggal' => $tanggal->copy()->addDays($i),
+                ];
+                $qty_sisa += $qty;
             }
 
-            // Urutkan berdasarkan tanggal
-            $riwayats = $riwayats->sortBy('tanggal');
+            // Generate 2 transaksi keluar, total keluar < total masuk
+            $keluarList = [];
+            $total_keluar = 0;
+            for ($j = 0; $j < 2; $j++) {
+                $max = floor($qty_sisa / 2); // supaya total keluar tidak melebihi sisa
+                $qty = rand(5, max(5, $max));
+                $total_keluar += $qty;
 
-            // Simpan riwayat dengan perhitungan qty_sisa
-            foreach ($riwayats as $data) {
+                $keluarList[] = [
+                    'id_barcode' => $barcode->id,
+                    'tipe' => 'keluar',
+                    'qty_produk' => $qty,
+                    'tanggal' => $tanggal->copy()->addDays(3 + $j),
+                ];
+            }
+
+            // Gabungkan dan simpan, hitung qty_sisa
+            $all = collect([...$masukList, ...$keluarList])->sortBy('tanggal');
+            $running_sisa = 0;
+
+            foreach ($all as $data) {
                 if ($data['tipe'] === 'masuk') {
-                    $qty_sisa += $data['qty_produk'];
+                    $running_sisa += $data['qty_produk'];
                 } else {
-                    $qty_sisa -= $data['qty_produk'];
-                    $qty_sisa = max($qty_sisa, 0);
+                    $running_sisa -= $data['qty_produk'];
+                    $running_sisa = max(0, $running_sisa);
                 }
 
-                Persediaan::create([
-                    'id_barcode' => $barcode->id,
-                    'tipe' => $data['tipe'],
-                    'qty_produk' => $data['qty_produk'],
-                    'tanggal' => $data['tanggal'],
-                    'qty_sisa' => $qty_sisa,
-                ]);
+                Persediaan::create($data);
             }
         }
     }

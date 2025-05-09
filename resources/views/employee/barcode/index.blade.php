@@ -45,7 +45,7 @@
                         @endphp
                         <span class="badge bg-{{ $kategoriBadge }}">{{ ucwords($kategori) }}</span>
                     </td>
-                    <td>
+                    <td class="text-center">
                         @php
                             $gudang = $barcode->gudang;
                             $gudangLabel = match($gudang) {
