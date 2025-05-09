@@ -24,25 +24,22 @@ class KaryawanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|string',
             'email' => 'required|email|unique:users',
-            'nip' => 'required|unique:karyawans',
-            'jabatan' => 'required',
-            'password' => 'required|min:6',
+            'jabatan' => 'required|string|in:kepala_divisi,staf_pengadaan,staf_produksi,staf_logistik',
+            'password' => 'required|string|min:6',
+            'no_telp' => 'nullable|string',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'role' => $request->jabatan, // ex: 'staf_pengadaan'
+            'role' => $request->jabatan,
             'password' => Hash::make($request->password),
         ]);
 
         $user->karyawan()->create([
-            'nip' => $request->nip,
-            'jabatan' => $request->jabatan,
             'no_telp' => $request->no_telp,
-            'alamat' => $request->alamat,
         ]);
 
         return redirect()->route('admin.karyawan.index')->with('success', 'Data karyawan berhasil ditambahkan.');
@@ -56,15 +53,14 @@ class KaryawanController extends Controller
     public function update(Request $request, Karyawan $karyawan)
     {
         $request->validate([
-            'nip' => 'required|unique:karyawans,nip,' . $karyawan->id,
-            'jabatan' => 'required',
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email,' . $karyawan->user_id,
+            'jabatan' => 'required|string|in:kepala_divisi,staf_pengadaan,staf_produksi,staf_logistik',
+            'no_telp' => 'nullable|string',
         ]);
 
         $karyawan->update([
-            'nip' => $request->nip,
-            'jabatan' => $request->jabatan,
             'no_telp' => $request->no_telp,
-            'alamat' => $request->alamat,
         ]);
 
         $karyawan->user->update([

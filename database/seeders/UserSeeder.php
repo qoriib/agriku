@@ -43,9 +43,7 @@ class UserSeeder extends Seeder
                 ]);
 
                 $user->karyawan()->create(
-                    Karyawan::factory()->make([
-                        'jabatan' => str_replace('_', ' ', $role),
-                    ])->toArray()
+                    Karyawan::factory()->make()->toArray()
                 );
             }
         }

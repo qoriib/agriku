@@ -17,10 +17,7 @@ class KaryawanFactory extends Factory
     public function definition(): array
     {
         return [
-            'nip' => $this->faker->unique()->numerify('NIP####'),
-            'jabatan' => $this->faker->randomElement(['kepala_divisi', 'staf_pengadaan', 'staf_produksi', 'staf_logistik']),
             'no_telp' => $this->faker->phoneNumber(),
-            'alamat' => $this->faker->address(),
         ];
     }
 }

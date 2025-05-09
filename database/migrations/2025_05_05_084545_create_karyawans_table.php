@@ -14,10 +14,7 @@ return new class extends Migration
         Schema::create('karyawans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('nip')->unique();
-            $table->string('jabatan'); // kepala divisi, staf pengadaan, dst.
             $table->string('no_telp')->nullable();
-            $table->text('alamat')->nullable();
             $table->timestamps();
         });
     }

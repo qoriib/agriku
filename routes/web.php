@@ -29,13 +29,13 @@ Route::get('/redirect-role', function () {
     $role = $user->role;
 
     return match ($role) {
-        'admin' => redirect()->route('admin.karyawan.index'),
         'kepala_divisi',
         'staf_pengadaan',
         'staf_produksi',
         'staf_logistik' => redirect()->route('employee.barcode.index'),
         'pemasok' => redirect()->route('supplier.pesanan.index'),
         'konsumen' => redirect()->route('customer.mako.index'),
+        'admin' => redirect()->route('admin.karyawan.index'),
         default => abort(403, 'Peran tidak dikenali'),
     };
 })->middleware('auth');
@@ -139,4 +139,10 @@ Route::prefix('supplier/pembayaran')->middleware('auth')->group(function () {
     Route::get('/', [\App\Http\Controllers\Supplier\PembayaranBahanBakuController::class, 'index'])->name('supplier.pembayaran.index');
     Route::get('/edit/{id}', [\App\Http\Controllers\Supplier\PembayaranBahanBakuController::class, 'edit'])->name('supplier.pembayaran.edit');
     Route::put('/edit/{id}', [\App\Http\Controllers\Supplier\PembayaranBahanBakuController::class, 'update'])->name('supplier.pembayaran.update');
+});
+
+Route::prefix('supplier/pengiriman')->middleware('auth')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Supplier\PengirimanBahanBakuController::class, 'index'])->name('supplier.pengiriman.index');
+    Route::get('/edit/{id}', [\App\Http\Controllers\Supplier\PengirimanBahanBakuController::class, 'edit'])->name('supplier.pengiriman.edit');
+    Route::put('/edit/{id}', [\App\Http\Controllers\Supplier\PengirimanBahanBakuController::class, 'update'])->name('supplier.pengiriman.update');
 });

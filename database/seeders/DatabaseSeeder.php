@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             PengirimanMakoSeeder::class,
             PesananBahanBakuSeeder::class,
             PembayaranBahanBakuSeeder::class,
+            PengirimanBahanBakuSeeder::class,
         ]);
     }
 }

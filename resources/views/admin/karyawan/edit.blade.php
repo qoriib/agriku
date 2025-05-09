@@ -1,43 +1,59 @@
-@extends('layouts.admin')
+@extends('layouts.app')
+
+@section('title', 'Edit Karyawan')
 
 @section('content')
-<h4>Edit Karyawan</h4>
-<form method="POST" action="{{ route('admin.karyawan.update', $karyawan->id) }}">
-    @csrf @method('PUT')
+<h4 class="mb-4">Form Edit Karyawan</h4>
 
-    <div class="row mb-3">
-        <div class="col">
-            <label>Nama</label>
-            <input type="text" name="name" value="{{ $karyawan->user->name }}" class="form-control" required>
-        </div>
-        <div class="col">
-            <label>Email</label>
-            <input type="email" name="email" value="{{ $karyawan->user->email }}" class="form-control" required>
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>NIP</label>
-        <input type="text" name="nip" value="{{ $karyawan->nip }}" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Jabatan</label>
-        <select name="jabatan" class="form-control" required>
-            @foreach(['kepala_divisi', 'staf_pengadaan', 'staf_produksi', 'staf_logistik'] as $jab)
-                <option value="{{ $jab }}" {{ $karyawan->jabatan == $jab ? 'selected' : '' }}>
-                    {{ ucwords(str_replace('_', ' ', $jab)) }}
-                </option>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0 mt-2">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
             @endforeach
-        </select>
+        </ul>
     </div>
-    <div class="mb-3">
-        <label>No. Telp</label>
-        <input type="text" name="no_telp" value="{{ $karyawan->no_telp }}" class="form-control">
+@endif
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ route('admin.karyawan.update', $karyawan->id) }}">
+            @csrf
+            @method('PUT')
+
+            <div class="vstack gap-3">
+                <div>
+                    <label class="form-label">Nama</label>
+                    <input type="text" name="name" class="form-control" value="{{ old('name', $karyawan->user->name) }}" required>
+                </div>
+
+                <div>
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" value="{{ old('email', $karyawan->user->email) }}" required>
+                </div>
+
+                <div>
+                    <label class="form-label">Jabatan</label>
+                    <select name="jabatan" class="form-select" required>
+                        @foreach(['kepala_divisi', 'staf_pengadaan', 'staf_produksi', 'staf_logistik'] as $jab)
+                            <option value="{{ $jab }}" {{ old('jabatan', $karyawan->user->role) === $jab ? 'selected' : '' }}>
+                                {{ ucwords(str_replace('_', ' ', $jab)) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label">No. Telp</label>
+                    <input type="text" name="no_telp" class="form-control" value="{{ old('no_telp', $karyawan->no_telp) }}">
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{{ route('admin.karyawan.index') }}" class="btn btn-secondary">Batal</a>
+                    <button class="btn btn-success">Update</button>
+                </div>
+            </div>
+        </form>
     </div>
-    <div class="mb-3">
-        <label>Alamat</label>
-        <textarea name="alamat" class="form-control">{{ $karyawan->alamat }}</textarea>
-    </div>
-    <button class="btn btn-success">Update</button>
-    <a href="{{ route('admin.karyawan.index') }}" class="btn btn-secondary">Batal</a>
-</form>
+</div>
 @endsection

@@ -25,7 +25,7 @@
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-5 col-lg-4">
+            <div class="col-md-6 col-lg-5">
                 <div class="text-center mb-4">
                     <div class="brand-title">Agriku - Sistem Rantai Pasok</div>
                 </div>
