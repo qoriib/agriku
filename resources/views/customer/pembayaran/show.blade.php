@@ -6,7 +6,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Detail Pembayaran</h5>
-        <a href="{{ route('customer.pembayaran.index') }}" class="btn btn-secondary btn-sm">
+        <a href="{{ route('divisi.pembayaran.index') }}" class="btn btn-secondary btn-sm">
             Kembali
         </a>
     </div>

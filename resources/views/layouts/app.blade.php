@@ -16,7 +16,10 @@
             @auth
                 @php $role = Auth::user()->role; @endphp
 
-                @if(in_array($role, ['admin', 'kepala_divisi', 'staf_pengadaan', 'staf_produksi', 'staf_logistik']))
+                @if($role === 'kepala_divisi')
+                    <a class="btn btn-light" href="{{ route('divisi.pesanan.index') }}">Pesanan Mako</a>
+                    <a class="btn btn-light" href="{{ route('divisi.pembayaran.index') }}">Pembayaran Mako</a>
+                @elseif(in_array($role, ['admin', 'staf_pengadaan', 'staf_produksi', 'staf_logistik']))
                     <a class="btn btn-light" href="{{ route('employee.barcode.index') }}">Barcode</a>
                     <a class="btn btn-light" href="{{ route('employee.persediaan.stok') }}">Daftar Persediaan</a>
                     <a class="btn btn-light" href="{{ route('employee.persediaan.riwayat') }}">Riwayat Persediaan</a>

@@ -13,6 +13,8 @@ use App\Http\Controllers\Employee\BarcodeController;
 use App\Http\Controllers\Employee\PengirimanMakoController;
 use App\Http\Controllers\Employee\PersediaanController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Divisi\PesananMakoController as DivisiPesananMakoController;
+use App\Http\Controllers\Divisi\PembayaranMakoController as DivisiPembayaranMakoController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
@@ -37,6 +39,17 @@ Route::prefix('/admin')->name('admin.')->group(function () {
     Route::resource('karyawan', KaryawanController::class);
     Route::resource('pemasok', PemasokController::class);
     Route::resource('konsumen', KonsumenController::class);
+});
+
+Route::prefix('divisi')->middleware('auth')->group(function () {
+    Route::get('/pesanan', [DivisiPesananMakoController::class, 'index'])->name('divisi.pesanan.index');
+    Route::put('/pesanan/{id}', [DivisiPesananMakoController::class, 'update'])->name('divisi.pesanan.update');
+    Route::delete('/pesanan/{id}', [DivisiPesananMakoController::class, 'destroy'])->name('divisi.pesanan.destroy');
+
+    Route::get('/pembayaran', [DivisiPembayaranMakoController::class, 'index'])->name('divisi.pembayaran.index');
+    Route::get('/pembayaran/{id}', [DivisiPembayaranMakoController::class, 'show'])->name('divisi.pembayaran.show');
+    Route::put('/pembayaran/{id}', [DivisiPembayaranMakoController::class, 'update'])->name('divisi.pembayaran.update');
+    Route::delete('/pembayaran/{id}', [DivisiPembayaranMakoController::class, 'destroy'])->name('divisi.pembayaran.destroy');
 });
 
 Route::prefix('customer/mako')->middleware('auth')->group(function () {
