@@ -115,6 +115,7 @@ Route::prefix('employee/persediaan')->middleware('auth')->group(function () {
     Route::get('/edit/{id}', [PersediaanController::class, 'edit'])->name('employee.persediaan.edit');
     Route::put('/edit/{id}', [PersediaanController::class, 'update'])->name('employee.persediaan.update');
     Route::delete('/delete/{id}', [PersediaanController::class, 'destroy'])->name('employee.persediaan.destroy');
+    Route::get('/scan', [PersediaanController::class, 'scan'])->name('employee.persediaan.scan');
 });
 
 Route::prefix('employee/pembayaran')->middleware('auth')->group(function () {

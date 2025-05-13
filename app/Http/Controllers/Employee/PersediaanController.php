@@ -120,4 +120,17 @@ class PersediaanController extends Controller
 
         return redirect()->route('employee.persediaan.riwayat')->with('success', 'Data berhasil dihapus.');
     }
+
+    public function scan(Request $request)
+    {
+        $kode = $request->kode;
+
+        $barcode = Barcode::where('kode_produk', $kode)->first();
+
+        if (!$barcode) {
+            return redirect()->back()->with('error', 'Produk tidak ditemukan.');
+        }
+
+        return view('employee.persediaan.scan_result', compact('barcode'));
+    }
 }

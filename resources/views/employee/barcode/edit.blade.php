@@ -33,9 +33,9 @@
                     <div>
                         <label class="form-label">Satuan</label>
                         <select name="satuan" class="form-select" required>
-                            <option value="kg" {{ old('satuan', $barcode->satuan) == 'kg' ? 'selected' : '' }}>Kilogram (kg)</option>
-                            <option value="liter" {{ old('satuan', $barcode->satuan) == 'liter' ? 'selected' : '' }}>Liter</option>
-                            <option value="pcs" {{ old('satuan', $barcode->satuan) == 'pcs' ? 'selected' : '' }}>Pieces (pcs)</option>
+                            <option value="Karung (30kg)" {{ old('satuan', $barcode->satuan) == 'Karung (30kg)' ? 'selected' : '' }} selected>Karung (30kg)</option>
+                            <option value="Karung (50kg)" {{ old('satuan', $barcode->satuan) == 'Karung (50kg)' ? 'selected' : '' }}>Karung (50kg)</option>
+                            <option value="PCS" {{ old('satuan', $barcode->satuan) == 'PCS' ? 'selected' : '' }}>PCS</option>
                         </select>
                     </div>
                     <div>

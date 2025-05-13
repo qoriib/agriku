@@ -37,7 +37,7 @@ class BarcodeFactory extends Factory
         return [
             'kode_produk' => $this->faker->unique()->numerify('##########'),
             'nama_produk' => $nama_produk ?? $this->faker->unique()->words(2, true),
-            'satuan' => $this->faker->randomElement(['kg', 'liter', 'pcs']),
+            'satuan' => $this->faker->randomElement(['Karung (30kg)', 'Karung (50kg)', 'PCS']),
             'kategori_produk' => $this->faker->randomElement(['barang jadi', 'bahan baku', 'bahan pendukung']),
             'gudang' => $this->faker->randomElement(['gudang1', 'gudang2', 'gudang3']),
         ];
