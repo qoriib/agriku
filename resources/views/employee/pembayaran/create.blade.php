@@ -17,7 +17,7 @@
 
 <div class="card">
     <div class="card-body">
-        <form action="{{ route('employee.pembayaran.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('employee.pembayaran.store', ['pesanan_id' => $pesanan->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="id_pesanan_bahan_baku" value="{{ $pesanan->id }}">
 

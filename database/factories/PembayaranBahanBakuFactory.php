@@ -15,11 +15,17 @@ class PembayaranBahanBakuFactory extends Factory
 
     public function definition(): array
     {
-        // Simulasi upload gambar dummy
-        $fileName = 'bukti_' . $this->faker->uuid . '.jpg';
-        $filePath = 'pembayaran_bahan_baku/' . $fileName;
+        $folder = 'pembayaran_bahan_baku';
+        Storage::disk('public')->makeDirectory($folder);
 
-        Storage::disk('public')->put($filePath, file_get_contents(public_path('images/sample.png')));
+        $filename = 'bukti_' . $this->faker->uuid . '.png';
+        $filePath = $folder . '/' . $filename;
+
+        // Salin file sample.png ke lokasi tujuan jika tersedia
+        $samplePath = public_path('images/sample.png');
+        if (file_exists($samplePath)) {
+            Storage::disk('public')->put($filePath, file_get_contents($samplePath));
+        }
 
         return [
             'no_rekening_penerima' => $this->faker->bankAccountNumber,

@@ -49,27 +49,33 @@
                     </td>
                     <td class="text-nowrap text-center">
                         <!-- Modal trigger -->
-                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $pesanan->id }}">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    
-                        <a href="{{ route('employee.pengadaan.edit', $pesanan->id) }}" class="btn btn-warning btn-sm">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                    
-                        <form action="{{ route('employee.pengadaan.destroy', $pesanan->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus pesanan ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash-alt"></i>
+                        <div class="hstack gap-1">
+                            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $pesanan->id }}">
+                                <i class="fas fa-eye"></i>
                             </button>
-                        </form>
-                    
-                        @if($pesanan->status === 'diterima' && !$pesanan->pembayaranBahanBaku)
-                            <a href="{{ route('employee.pembayaran.create', $pesanan->id) }}" class="btn btn-success btn-sm mt-1">
-                                <i class="fas fa-credit-card"></i> Bayar
+                        
+                            <a href="{{ route('employee.pengadaan.edit', $pesanan->id) }}" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i>
                             </a>
-                        @endif
+                        
+                            <form action="{{ route('employee.pengadaan.destroy', $pesanan->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus pesanan ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        
+                            @if($pesanan->status === 'diterima' && !$pesanan->pembayaranBahanBaku)
+                                <a href="{{ route('employee.pembayaran.create', $pesanan->id) }}" class="btn btn-success btn-sm" title="Bayar">
+                                    <i class="fas fa-credit-card"></i>
+                                </a>
+                            @elseif($pesanan->pembayaranBahanBaku)
+                                <a href="{{ route('employee.pembayaran.show', $pesanan->pembayaranBahanBaku->id) }}" class="btn btn-secondary btn-sm" title="Lihat Pembayaran">
+                                    <i class="fas fa-receipt"></i>
+                                </a>
+                            @endif
+                        </div>
                     </td>
                 </tr>
                 @endforeach

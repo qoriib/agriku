@@ -11,6 +11,17 @@ class PembayaranBahanBaku extends Model
 
     protected $table = 'pembayaran_bahan_baku';
 
+    protected $fillable = [
+        'id_pesanan_bahan_baku',
+        'id_karyawan',
+        'no_rekening_penerima',
+        'nama_bank_penerima',
+        'nama_pengirim',
+        'nama_bank_pengirim',
+        'bukti_pembayaran',
+        'status',
+    ];
+
     public function pesananBahanBaku()
     {
         return $this->belongsTo(PesananBahanBaku::class, 'id_pesanan_bahan_baku');
