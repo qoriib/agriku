@@ -9,6 +9,8 @@ class Konsumen extends Model
 {
     use HasFactory;
 
+    protected $table = 'konsumens';
+
     protected $fillable = ['user_id', 'no_telp', 'alamat'];
 
     public function user()

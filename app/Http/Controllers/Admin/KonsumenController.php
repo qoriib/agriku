@@ -49,16 +49,16 @@ class KonsumenController extends Controller
         return view('admin.konsumen.edit', compact('konsuman'));
     }
 
-    public function update(Request $request, Konsumen $konsumen)
+    public function update(Request $request, Konsumen $konsuman)
     {
-        $konsumen->update($request->only(['no_telp', 'alamat']));
-        $konsumen->user->update($request->only(['name', 'email']));
+        $konsuman->update($request->only(['no_telp', 'alamat']));
+        $konsuman->user->update($request->only(['name', 'email']));
         return redirect()->route('admin.konsumen.index')->with('success', 'Data konsumen diperbarui.');
     }
 
-    public function destroy(Konsumen $konsumen)
+    public function destroy(Konsumen $konsuman)
     {
-        $konsumen->user()->delete();
+        $konsuman->user()->delete();
         return redirect()->route('admin.konsumen.index')->with('success', 'Data konsumen dihapus.');
     }
 }
