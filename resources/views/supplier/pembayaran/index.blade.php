@@ -20,7 +20,6 @@
                     <th>Kode Pemesanan</th>
                     <th>Nama Pengirim</th>
                     <th>Status</th>
-                    <th>Bukti</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -34,11 +33,6 @@
                         <span class="badge bg-{{ $item->status === 'lunas' ? 'success' : 'warning' }}">
                             {{ ucfirst($item->status) }}
                         </span>
-                    </td>
-                    <td class="text-center">
-                        <a href="{{ asset(str_replace('public/', 'storage/', $item->bukti_pembayaran)) }}" target="_blank" class="btn btn-outline-dark btn-sm">
-                            <i class="fas fa-image"></i>
-                        </a>
                     </td>
                     <td class="text-nowrap text-center">
                         <a href="{{ route('supplier.pembayaran.edit', $item->id) }}" class="btn btn-warning btn-sm">

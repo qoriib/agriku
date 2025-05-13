@@ -15,10 +15,10 @@ class PembayaranBahanBakuFactory extends Factory
 
     public function definition(): array
     {
-        $folder = 'pembayaran_bahan_baku';
+        $folder = 'bukti_pembayaran_bahan_baku';
         Storage::disk('public')->makeDirectory($folder);
 
-        $filename = 'bukti_' . $this->faker->uuid . '.png';
+        $filename = $this->faker->uuid . '.png';
         $filePath = $folder . '/' . $filename;
 
         // Salin file sample.png ke lokasi tujuan jika tersedia

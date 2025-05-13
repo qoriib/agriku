@@ -58,6 +58,11 @@
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </form>
+                        @if($pesanan->status === 'diterima' && !$pesanan->pengirimanBahanBaku)
+                            <a href="{{ route('supplier.pengiriman.create', $pesanan->id) }}" class="btn btn-success btn-sm">
+                                <i class="fas fa-truck"></i>
+                            </a>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

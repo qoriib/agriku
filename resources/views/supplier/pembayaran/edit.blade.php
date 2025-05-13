@@ -11,6 +11,30 @@
             @csrf
             @method('PUT')
 
+            <dl class="row mb-4">
+                <dt class="col-sm-4">Kode Pemesanan</dt>
+                <dd class="col-sm-8 font-monospace">{{ $pembayaran->pesananBahanBaku->formulirPemesanan->kode_pemesanan_bahan_baku }}</dd>
+
+                <dt class="col-sm-4">Nama Pengirim</dt>
+                <dd class="col-sm-8">{{ $pembayaran->nama_pengirim }}</dd>
+
+                <dt class="col-sm-4">Bank Pengirim</dt>
+                <dd class="col-sm-8">{{ $pembayaran->nama_bank_pengirim }}</dd>
+
+                <dt class="col-sm-4">Bank Penerima</dt>
+                <dd class="col-sm-8">{{ $pembayaran->nama_bank_penerima }}</dd>
+
+                <dt class="col-sm-4">No Rekening</dt>
+                <dd class="col-sm-8">{{ $pembayaran->no_rekening_penerima }}</dd>
+
+                <dt class="col-sm-4">Bukti Pembayaran</dt>
+                <dd class="col-sm-8">
+                    <a href="{{ asset('storage/' . $pembayaran->bukti_pembayaran) }}" target="_blank">
+                        <img src="{{ asset('storage/' . $pembayaran->bukti_pembayaran) }}" alt="Bukti Pembayaran" class="img-fluid rounded border" style="max-height: 200px;">
+                    </a>
+                </dd>
+            </dl>
+
             <div class="mb-3">
                 <label class="form-label">Status Pembayaran</label>
                 <select name="status" class="form-select" required>

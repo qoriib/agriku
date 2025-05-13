@@ -46,7 +46,7 @@
                 </td>
                 <td class="text-center">
                     <a href="{{ route('supplier.pengiriman.edit', $item->id) }}" class="btn btn-warning btn-sm">
-                        <i class="fas fa-edit"></i> Ubah
+                        <i class="fas fa-edit"></i>
                     </a>
                 </td>
             </tr>

@@ -38,7 +38,7 @@
                             </span>
                         </td>
                         <td class="text-center">
-                            <a href="{{ asset(str_replace('public/', 'storage/', $item->bukti_pembayaran)) }}" target="_blank" class="btn btn-sm btn-outline-dark">
+                            <a href="{{ asset('storage/' . $item->bukti_pembayaran) }}" target="_blank" class="btn btn-sm btn-outline-dark">
                                 <i class="fas fa-image"></i>
                             </a>
                         </td>

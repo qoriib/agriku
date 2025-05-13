@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Supplier;
 
 use App\Http\Controllers\Controller;
 use App\Models\PengirimanBahanBaku;
+use App\Models\PesananBahanBaku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,6 +22,46 @@ class PengirimanBahanBakuController extends Controller
             ->get();
 
         return view('supplier.pengiriman.index', compact('pengirimans'));
+    }
+
+    public function create($pesananId)
+    {
+        $pesanan = PesananBahanBaku::with('formulirPemesanan')->findOrFail($pesananId);
+
+        // Pastikan pemasoknya sama
+        if ($pesanan->id_pemasok !== Auth::user()->pemasok->id) {
+            abort(403);
+        }
+
+        return view('supplier.pengiriman.create', compact('pesanan'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'id_pesanan_bahan_baku' => 'required|exists:pesanan_bahan_baku,id',
+            'estimasi_sampai' => 'required|date',
+            'bukti_pengiriman' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $pesanan = PesananBahanBaku::findOrFail($request->id_pesanan_bahan_baku);
+
+        if ($pesanan->id_pemasok !== Auth::user()->pemasok->id) {
+            abort(403);
+        }
+
+        $filePath = $request->file('bukti_pengiriman')->store('bukti_pengiriman_bahan_baku', 'public');
+
+        PengirimanBahanBaku::create([
+            'id_pesanan_bahan_baku' => $pesanan->id,
+            'id_pemasok' => $pesanan->id_pemasok,
+            'id_karyawan' => $pesanan->id_karyawan,
+            'estimasi_sampai' => $request->estimasi_sampai,
+            'bukti_pengiriman' => $filePath,
+            'status' => 'dikirim',
+        ]);
+
+        return redirect()->route('supplier.pengiriman.index')->with('success', 'Pengiriman berhasil ditambahkan.');
     }
 
     public function edit($id)

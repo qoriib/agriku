@@ -144,6 +144,8 @@ Route::prefix('supplier/pembayaran')->middleware('auth')->group(function () {
 
 Route::prefix('supplier/pengiriman')->middleware('auth')->group(function () {
     Route::get('/', [\App\Http\Controllers\Supplier\PengirimanBahanBakuController::class, 'index'])->name('supplier.pengiriman.index');
+    Route::get('/create/{pesananId}', [\App\Http\Controllers\Supplier\PengirimanBahanBakuController::class, 'create'])->name('supplier.pengiriman.create');
+    Route::post('/store', [\App\Http\Controllers\Supplier\PengirimanBahanBakuController::class, 'store'])->name('supplier.pengiriman.store');
     Route::get('/edit/{id}', [\App\Http\Controllers\Supplier\PengirimanBahanBakuController::class, 'edit'])->name('supplier.pengiriman.edit');
     Route::put('/edit/{id}', [\App\Http\Controllers\Supplier\PengirimanBahanBakuController::class, 'update'])->name('supplier.pengiriman.update');
 });

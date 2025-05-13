@@ -50,9 +50,8 @@
 
             <dt class="col-sm-4">Bukti Pembayaran</dt>
             <dd class="col-sm-8">
-                <a href="{{ asset(str_replace('public/', 'storage/', $pembayaran->bukti_pembayaran)) }}" target="_blank">
-                    <img src="{{ asset(str_replace('public/', 'storage/', $pembayaran->bukti_pembayaran)) }}"
-                         alt="Bukti Pembayaran" class="img-fluid img-thumbnail" style="max-height: 250px;">
+                <a href="{{ asset('storage/' . $pembayaran->bukti_pembayaran) }}" target="_blank">
+                    <img src="{{ asset('storage/' . $pembayaran->bukti_pembayaran) }}" alt="Bukti Pembayaran" class="img-fluid img-thumbnail" style="max-height: 250px;">
                 </a>
             </dd>
         </dl>
