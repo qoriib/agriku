@@ -155,6 +155,12 @@ Route::prefix('employee')->middleware('auth')->name('employee.')->group(function
         Route::put('/edit/{id}', 'update')->name('update');
         Route::delete('/delete/{id}', 'destroy')->name('destroy');
     });
+
+    // List Order
+    Route::controller(Controllers\Employee\ListOrderController::class)->prefix('order')->name('order.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/print', 'print')->name('print');
+    });
 });
 
 /*

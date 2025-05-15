@@ -6,6 +6,9 @@
 <h4 class="mb-4 d-flex justify-content-between align-items-center">
     <span>Riwayat Persediaan: <strong>{{ $barcode->nama_produk }}</strong></span>
     <div class="d-flex gap-2">
+        <a href="{{ route('employee.persediaan.create') }}" class="btn btn-success btn-sm">
+            Tambah Persediaan
+        </a>
         <a href="{{ route('employee.barcode.index') }}" class="btn btn-secondary btn-sm">
             Kembali
         </a>

@@ -31,4 +31,9 @@ class PesananMako extends Model
     {
         return $this->hasOne(PembayaranMako::class, 'id_pesanan_mako');
     }
+
+    public function pengirimanMako()
+    {
+        return $this->hasOne(PengirimanMako::class, 'id_pesanan_mako');
+    }
 }
