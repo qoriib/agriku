@@ -161,6 +161,14 @@ Route::prefix('employee')->middleware('auth')->name('employee.')->group(function
         Route::get('/', 'index')->name('index');
         Route::get('/print', 'print')->name('print');
     });
+
+    // Laporan
+    Route::controller(Controllers\Employee\LaporanController::class)->prefix('laporan')->name('laporan.')->group(function () {
+        Route::get('/bahan-baku', 'bahanBaku')->name('bahanbaku');
+        Route::get('/bahan-baku/print', 'printBahanBaku')->name('bahanbaku.print');
+        Route::get('/penjualan', 'penjualan')->name('penjualan');
+        Route::get('/penjualan/print', 'printPenjualan')->name('penjualan.print');
+    });
 });
 
 /*
