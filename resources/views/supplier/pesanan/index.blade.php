@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pesanan Bahan Baku dari Agriku')
+@section('title', 'Pesanan Bahan Baku')
 
 @section('content')
 <h4 class="mb-4">Pesanan Bahan Baku Diterima</h4>

@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
         // === Admin ===
         for ($i = 1; $i <= 2; $i++) {
             User::factory()->create([
-                'email' => "admin{$i}@agriku.com",
+                'email' => "admin{$i}@kopMAKO.com",
                 'password' => bcrypt($passwords['admin']),
                 'role' => 'admin',
             ]);
@@ -37,7 +37,7 @@ class UserSeeder extends Seeder
         foreach ($karyawanRoles as $role) {
             for ($i = 1; $i <= 2; $i++) {
                 $user = User::factory()->create([
-                    'email' => "{$role}{$i}@agriku.com",
+                    'email' => "{$role}{$i}@kopMAKO.com",
                     'password' => bcrypt($passwords[$role]),
                     'role' => $role,
                 ]);
@@ -49,7 +49,7 @@ class UserSeeder extends Seeder
         // === Pemasok ===
         for ($i = 1; $i <= 2; $i++) {
             $user = User::factory()->create([
-                'email' => "pemasok{$i}@agriku.com",
+                'email' => "pemasok{$i}@kopMAKO.com",
                 'password' => bcrypt($passwords['pemasok']),
                 'role' => 'pemasok',
             ]);
@@ -60,7 +60,7 @@ class UserSeeder extends Seeder
         // === Konsumen ===
         for ($i = 1; $i <= 2; $i++) {
             $user = User::factory()->create([
-                'email' => "konsumen{$i}@agriku.com",
+                'email' => "konsumen{$i}@kopMAKO.com",
                 'password' => bcrypt($passwords['konsumen']),
                 'role' => 'konsumen',
             ]);
